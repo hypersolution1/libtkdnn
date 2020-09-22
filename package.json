@@ -1,0 +1,17 @@
+{
+  "name": "libtkdnn",
+  "version": "0.0.1",
+  "description": "This library performs non-blocking inference using tkDNN.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hypersolution1/libtkdnn.git"
+  },
+  "main": "addon.js",
+  "gypfile": true,
+  "dependencies": {
+    "bindings": "1.5.0",
+    "node-addon-api": "3.0.2"
+  },
+  "author": "Marc-André Marceau",
+  "license": "ISC"
+}

@@ -18,6 +18,10 @@ class Tkdnn : public Napi::ObjectWrap<Tkdnn> {
     Napi::Value load(const Napi::CallbackInfo& info);
     Napi::Value execute(const Napi::CallbackInfo& info);
 
+    int n_classes;
+    int n_batch;
+    float conf_thresh;
+
     tk::dnn::Yolo3Detection yolo;
 
 };

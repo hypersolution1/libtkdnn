@@ -31,13 +31,41 @@ Napi::Object Tkdnn::NewInstance(Napi::Env env, Napi::Value arg) {
 
 Napi::Value Tkdnn::load(const Napi::CallbackInfo &info)
 {
-  int n_classes = 80;
-  int n_batch = 1;
-  float conf_thresh = 0.3;
 
   Napi::Env env = info.Env();
-  std::string fname = std::string(info[0].As<Napi::String>());
 
+  Napi::Object options;
+  std::string fname;
+
+  if(info[0].IsObject()) {
+    options = info[0].As<Napi::Object>();
+  } else {
+    //options = Napi::Object::New(env);
+    Napi::Error::New(env, "Missing config object").ThrowAsJavaScriptException();
+    return env.Undefined();
+  }
+
+  n_classes = 80;
+  if(options.HasOwnProperty("n_classes")) {
+    n_classes = options.Get("n_classes").As<Napi::Number>().Int32Value();
+  }
+  n_batch = 1;
+  if(options.HasOwnProperty("n_batch")) {
+    n_batch = options.Get("n_batch").As<Napi::Number>().Int32Value();
+  }
+  conf_thresh = 0.3;
+  if(options.HasOwnProperty("conf_thresh")) {
+    conf_thresh = options.Get("conf_thresh").As<Napi::Number>();
+  }
+
+  if(options.HasOwnProperty("model")) {
+    fname = options.Get("model").As<Napi::String>();
+  } else {
+    Napi::Error::New(env, "Missing model path").ThrowAsJavaScriptException();
+    return env.Undefined();
+  }
+
+  printf("%s %d\n", fname.c_str(), n_classes);
   yolo.init(fname, n_classes, n_batch, conf_thresh);
 
   return env.Undefined();

@@ -29,6 +29,13 @@ Napi::Object Tkdnn::NewInstance(Napi::Env env, Napi::Value arg) {
   return scope.Escape(napi_value(obj)).ToObject();
 }
 
+bool fileExist(const char *fname) {
+    std::ifstream dataFile (fname, std::ios::in | std::ios::binary);
+    if(!dataFile)
+        return false;
+    return true;
+}
+
 Napi::Value Tkdnn::load(const Napi::CallbackInfo &info)
 {
 
@@ -62,6 +69,11 @@ Napi::Value Tkdnn::load(const Napi::CallbackInfo &info)
     fname = options.Get("model").As<Napi::String>();
   } else {
     Napi::Error::New(env, "Missing model path").ThrowAsJavaScriptException();
+    return env.Undefined();
+  }
+
+  if(!fileExist(fname.c_str())) {
+    Napi::Error::New(env, "Model file not found").ThrowAsJavaScriptException();
     return env.Undefined();
   }
 

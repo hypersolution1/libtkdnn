@@ -15,6 +15,7 @@ class Tkdnn : public Napi::ObjectWrap<Tkdnn> {
 
   private:
     static Napi::FunctionReference constructor;
+    Napi::Value getComputeCapability(const Napi::CallbackInfo& info);
     Napi::Value load(const Napi::CallbackInfo& info);
     Napi::Value execute(const Napi::CallbackInfo& info);
 

@@ -7,6 +7,7 @@ Napi::Object Tkdnn::Init(Napi::Env env, Napi::Object exports) {
   Napi::HandleScope scope(env);
 
   Napi::Function func = DefineClass(env, "Tkdnn", {
+      InstanceMethod("getComputeCapability", &Tkdnn::getComputeCapability),
       InstanceMethod("load", &Tkdnn::load),
       InstanceMethod("execute", &Tkdnn::execute),
   });
@@ -29,11 +30,22 @@ Napi::Object Tkdnn::NewInstance(Napi::Env env, Napi::Value arg) {
   return scope.Escape(napi_value(obj)).ToObject();
 }
 
+Napi::Value Tkdnn::getComputeCapability(const Napi::CallbackInfo &info) {
+  Napi::Env env = info.Env();
+  char buf[10];
+  int major = 0, minor = 0;
+  cudaDeviceGetAttribute(&major, cudaDevAttrComputeCapabilityMajor, 0);
+  cudaDeviceGetAttribute(&minor, cudaDevAttrComputeCapabilityMinor, 0);
+  snprintf(buf, 10, "%d.%d", major, minor);
+  Napi::String ret = Napi::String::New(env, buf);
+  return ret;
+}
+
 bool fileExist(const char *fname) {
-    std::ifstream dataFile (fname, std::ios::in | std::ios::binary);
-    if(!dataFile)
-        return false;
-    return true;
+  std::ifstream dataFile (fname, std::ios::in | std::ios::binary);
+  if(!dataFile)
+    return false;
+  return true;
 }
 
 Napi::Value Tkdnn::load(const Napi::CallbackInfo &info)

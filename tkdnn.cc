@@ -89,7 +89,7 @@ Napi::Value Tkdnn::load(const Napi::CallbackInfo &info)
     return env.Undefined();
   }
 
-  printf("%s %d\n", fname.c_str(), n_classes);
+  //printf("%s %d\n", fname.c_str(), n_classes);
   yolo.init(fname, n_classes, n_batch, conf_thresh);
 
   return env.Undefined();

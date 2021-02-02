@@ -11,6 +11,7 @@
         "/usr/local/include/tkDNN",
         "/usr/local/include/eigen3",
         "/usr/local/include/opencv4",
+        "/usr/include/opencv4",
       ],
       "defines": [ 'NAPI_DISABLE_CPP_EXCEPTIONS' ],
       "ldflags": [ ], 
